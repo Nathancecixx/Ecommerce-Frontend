@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { loginUser } from '../api';
 
-const Login = () => {
+const Login = ({ setToken }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -9,9 +9,12 @@ const Login = () => {
         e.preventDefault();
         try {
             const data = await loginUser({ email, password });
+            console.log('Login response:', data);
+            localStorage.setItem('token', data.token);
+            setToken(data.token);
             console.log('User logged in:', data);
         } catch (error) {
-            console.error('Error logging in user:', error);
+            console.error('Error logging in user:', error.response ? error.response.data : error.message);
         }
     };
 
@@ -35,4 +38,3 @@ const Login = () => {
 };
 
 export default Login;
-
